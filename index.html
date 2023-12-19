@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>URL Duplicate Checker</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 50px;
+        }
+
+        textarea {
+            width: 100%;
+            height: 150px;
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        #result {
+            margin-top: 20px;
+            text-align: left;
+        }
+
+        .duplicate {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <h1>URL Duplicate Checker</h1>
+
+    <label for="inputUrls">Enter URLs (one per line):</label>
+    <textarea id="inputUrls" placeholder="https://example.com
+https://example2.com
+https://example.com"></textarea>
+
+    <button onclick="checkDuplicates()">Check and Highlight Duplicates</button>
+
+    <div id="result"></div>
+
+    <script>
+        function checkDuplicates() {
+            // Get input values and split into an array
+            var inputUrls = document.getElementById('inputUrls').value;
+            var urlsArray = inputUrls.split('\n').map(url => url.trim());
+
+            // Find duplicates using a Set
+            var uniqueUrlsSet = new Set();
+            var duplicateUrlsSet = new Set();
+
+            urlsArray.forEach(url => {
+                if (uniqueUrlsSet.has(url)) {
+                    duplicateUrlsSet.add(url);
+                } else {
+                    uniqueUrlsSet.add(url);
+                }
+            });
+
+            // Display result
+            var resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = '<strong>Original URLs:</strong><br>' + urlsArray.map(url => {
+                return duplicateUrlsSet.has(url) ? '<span class="duplicate">' + url + '</span>' : url;
+            }).join('<br>') + '<br><br>' +
+            '<strong>Duplicate URLs:</strong><br>' + Array.from(duplicateUrlsSet).join('<br>') + '<br><br>' +
+            '<strong>Unique URLs:</strong><br>' + Array.from(uniqueUrlsSet).join('<br>');
+        }
+    </script>
+</body>
+</html>
